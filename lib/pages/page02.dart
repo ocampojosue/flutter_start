@@ -59,20 +59,14 @@ class Page02 extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                padding: const EdgeInsets.symmetric(
-                  vertical: 15.0,
-                  horizontal: 10.0,
-                ),
                 primary: Colors.red,
               ),
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const <Widget>[
                   Text(
                     "ACEPTO TODO",
-                    style: TextStyle(
-                      fontSize: 20.0,
-                    ),
                     textAlign: TextAlign.center,
                   ),
                   Icon(

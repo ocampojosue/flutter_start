@@ -39,7 +39,6 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text("HOME"),
             ElevatedButton(
               onPressed: () => {
                 Navigator.push(context,
