@@ -1,10 +1,6 @@
-// ignore_for_file: deprecated_member_use, avoid_print, unnecessary_new, prefer_final_fields
-
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -12,9 +8,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: "Mi App",
+      title: 'Material App',
       home: Home(),
-      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -27,43 +22,86 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Empresa _facebook = new Empresa("Facebook", "Mark", 1000);
-  Empresa _google = new Empresa("Google", "Josue", 1500);
-
+  List<Persona> _personas = [
+    Persona("name1", "lastname1", "phone1"),
+    Persona("name2", "lastname2", "phone2"),
+    Persona("name3", "lastname3", "phone3"),
+    Persona("name4", "lastname4", "phone4"),
+    Persona("name5", "lastname5", "phone5"),
+    Persona("name6", "lastname6", "phone6"),
+    Persona("name7", "lastname7", "phone7"),
+  ];
   @override
   void initState() {
     super.initState();
-    print(_facebook.nombre);
-    print(_facebook.propietario);
-    print(_facebook.ingresoAnual);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("API REST"),
-        backgroundColor: const Color(
-          0xFF191e3a,
-        ),
+        title: const Text("SADsd"),
       ),
-      body: Center(
-        child: Text(
-          _google.ingresoAnual.toString(),
-          style: const TextStyle(
-            fontSize: 24.0,
+      body: ListView.builder(
+          itemCount: _personas.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              onLongPress: () {
+                _borrarPersona(context, _personas[index]);
+              },
+              title:
+                  Text("${_personas[index].name} ${_personas[index].lastname}"),
+              subtitle: Text(_personas[index].phone),
+              leading: CircleAvatar(
+                child: Text(_personas[index].name.substring(0, 1)),
+              ),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+              ),
+            );
+          }),
+    );
+  }
+
+  _borrarPersona(context, Persona persona) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("ELIMINAR CONTACTO"),
+        content: Text("¿ESTA SEGURO DE ELIMINAR A " + persona.name + '?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("CANCELAR"),
           ),
-        ),
+          TextButton(
+            onPressed: () {
+              print(persona.name);
+              setState(() {
+                _personas.remove(persona);
+              });
+              Navigator.pop(context);
+            },
+            child: const Text(
+              "BORRAR",
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
 }
 
-class Empresa {
-  final String nombre;
-  final String propietario;
-  final int ingresoAnual;
-  Empresa(this.nombre, this.propietario, this.ingresoAnual) {
-    print("object");
+class Persona {
+  String name;
+  String lastname;
+  String phone;
+  Persona(this.name, this.lastname, this.phone) {
+    print("HOLA");
   }
 }
