@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, avoid_print, unnecessary_new, prefer_final_fields
 
 import 'package:flutter/material.dart';
 
@@ -27,81 +27,43 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool _suscribe = false;
+  Empresa _facebook = new Empresa("Facebook", "Mark", 1000);
+  Empresa _google = new Empresa("Google", "Josue", 1500);
+
+  @override
+  void initState() {
+    super.initState();
+    print(_facebook.nombre);
+    print(_facebook.propietario);
+    print(_facebook.ingresoAnual);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("ALERT DIALOG"),
-        backgroundColor: const Color(0xFF191e3a),
+        title: const Text("API REST"),
+        backgroundColor: const Color(
+          0xFF191e3a,
+        ),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: const Color(0xFF191e3a),
-              ),
-              child: Text(
-                _suscribe
-                    ? "CANCELAR SUSCRIPCIÓN AL CANAL"
-                    : "SUSCRIBIRSE A ESTE CANAL",
-                style: const TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                _showAlert(context);
-              },
-            ),
-            const SizedBox(
-              height: 100,
-            ),
-            Text(
-              _suscribe ? "SUSCRITO" : "NO SUSCRITO",
-              style: const TextStyle(
-                fontSize: 20.0,
-              ),
-            ),
-          ],
+        child: Text(
+          _google.ingresoAnual.toString(),
+          style: const TextStyle(
+            fontSize: 24.0,
+          ),
         ),
       ),
     );
   }
+}
 
-  void _showAlert(BuildContext context) {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("SUSCRÍBETE"),
-        content: Text(
-          _suscribe
-              ? "¿SEGURO DE QUERER CANCELAR LA SUSCRIPCIÓN AL CANAL?"
-              : "¿SEGURO DE QUERER SUSCRIBIRSE A ESTE CANAL?",
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              print("SI");
-              setState(() {
-                _suscribe = !_suscribe;
-              });
-              Navigator.pop(context);
-            },
-            child: const Text("SI"),
-          ),
-          TextButton(
-            onPressed: () {
-              print("NO");
-              Navigator.pop(context);
-            },
-            child: const Text("CANCELAR"),
-          ),
-        ],
-      ),
-    );
+class Empresa {
+  final String nombre;
+  final String propietario;
+  final int ingresoAnual;
+  Empresa(this.nombre, this.propietario, this.ingresoAnual) {
+    print("object");
   }
 }
