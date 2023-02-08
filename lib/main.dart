@@ -1,107 +1,65 @@
+// ignore_for_file: avoid_print
+
+import 'dart:convert';
+
+import 'package:api_rest_yt_course/models/gif.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(const MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Material App',
-      home: Home(),
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Future<List<Gif>?> _getGifs() async {
+    final response = await http.get(
+      Uri.parse(
+          "https://api.giphy.com/v1/gifs/trending?api_key=SP6Ny1kGNN34J8AHZpl4zxVXM9Fnoqj8&limit=10&rating=g"),
     );
+    List<Gif> gifs = [];
+    if (response.statusCode == 200) {
+      String body = utf8.decode(response.bodyBytes);
+      final jsonData = jsonDecode(body);
+      //print(jsonData["data"][0]["images"]["downsized"]["url"]);
+      for (var item in jsonData["data"]) {
+        gifs.add(Gif(item["title"], item["images"]["downsized"]["url"]));
+      }
+      return gifs;
+    } else {
+      throw Exception("FALLÓ LA CONEXIÓN");
+    }
   }
-}
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  late final Future<List<Gif>?> _listadoGifs = _getGifs();
 
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  List<Persona> _personas = [
-    Persona("name1", "lastname1", "phone1"),
-    Persona("name2", "lastname2", "phone2"),
-    Persona("name3", "lastname3", "phone3"),
-    Persona("name4", "lastname4", "phone4"),
-    Persona("name5", "lastname5", "phone5"),
-    Persona("name6", "lastname6", "phone6"),
-    Persona("name7", "lastname7", "phone7"),
-  ];
   @override
   void initState() {
     super.initState();
+    _listadoGifs;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("SADsd"),
-      ),
-      body: ListView.builder(
-          itemCount: _personas.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              onLongPress: () {
-                _borrarPersona(context, _personas[index]);
-              },
-              title:
-                  Text("${_personas[index].name} ${_personas[index].lastname}"),
-              subtitle: Text(_personas[index].phone),
-              leading: CircleAvatar(
-                child: Text(_personas[index].name.substring(0, 1)),
-              ),
-              trailing: const Icon(
-                Icons.arrow_forward_ios,
-              ),
-            );
-          }),
-    );
-  }
-
-  _borrarPersona(context, Persona persona) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("ELIMINAR CONTACTO"),
-        content: Text("¿ESTA SEGURO DE ELIMINAR A " + persona.name + '?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text("CANCELAR"),
+    return MaterialApp(
+      title: 'Material Appp',
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Material App BaR'),
+          backgroundColor: Colors.red,
+        ),
+        body: Center(
+          child: Container(
+            padding: const EdgeInsets.all(0.0),
+            child: const Text('Hello World'),
           ),
-          TextButton(
-            onPressed: () {
-              print(persona.name);
-              setState(() {
-                _personas.remove(persona);
-              });
-              Navigator.pop(context);
-            },
-            child: const Text(
-              "BORRAR",
-              style: TextStyle(
-                color: Colors.red,
-              ),
-            ),
-          )
-        ],
+        ),
       ),
     );
-  }
-}
-
-class Persona {
-  String name;
-  String lastname;
-  String phone;
-  Persona(this.name, this.lastname, this.phone) {
-    print("HOLA");
   }
 }
